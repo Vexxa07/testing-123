@@ -1,173 +1,176 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Clock, ThumbsUp, Share, Bookmark, ArrowLeft, Calendar } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { ArrowLeft, Clock, Calendar, ThumbsUp, Share2, Bookmark, MessageSquare } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import NewsCard from '../components/NewsCard';
 
-// Mock article content
-const articleContent = {
+type ArticleParams = {
+  id: string;
+}
+
+// Mock article data
+const articleData = {
   '1': {
+    id: '1',
     title: 'Bitcoin ETF Approval Sends Markets into Bull Run Territory',
     content: `
-      <p class="lead">After years of anticipation, the SEC has finally approved the first Bitcoin spot ETF, allowing institutional investors easier access to the crypto market.</p>
+      <p>After years of anticipation, the Securities and Exchange Commission (SEC) has finally approved the first Bitcoin spot Exchange-Traded Fund (ETF), marking a significant milestone in the cryptocurrency industry's journey toward mainstream acceptance.</p>
       
-      <p>In a landmark decision that has sent shockwaves through the financial world, the U.S. Securities and Exchange Commission (SEC) has given the green light to the first-ever Bitcoin spot Exchange-Traded Fund (ETF). This approval marks the culmination of a long and arduous journey for the cryptocurrency industry, which has been seeking regulatory validation for its flagship asset.</p>
+      <p>The approval, which came after multiple rejected applications over the past five years, allows institutional investors easier access to the Bitcoin market without the need to directly hold the digital asset. This development is expected to bring billions of dollars of new investment into the cryptocurrency ecosystem.</p>
       
-      <h2>A New Era for Institutional Investment</h2>
+      <h2>Market Reaction</h2>
       
-      <p>The approval of a Bitcoin spot ETF represents a watershed moment for cryptocurrency as an asset class. Unlike previously approved Bitcoin futures ETFs, a spot ETF directly holds the underlying asset, providing investors with a more direct exposure to Bitcoin's price movements without the need to manage private keys or navigate complex cryptocurrency exchanges.</p>
+      <p>Following the announcement, Bitcoin's price surged by over 15% within 24 hours, briefly touching an all-time high above $68,000. The strong price action has led many analysts to suggest that crypto markets have officially entered "bull run territory."</p>
       
-      <p>"This is what the industry has been waiting for," said Jane Smith, chief crypto strategist at Global Investment Partners. "A spot ETF significantly lowers the barrier to entry for institutional investors who have been hesitant to directly engage with cryptocurrency markets due to regulatory uncertainty, custody concerns, and operational complexities."</p>
+      <p>"This is the legitimization that many traditional investors were waiting for," said Jane Smith, Chief Crypto Strategist at Investment Capital. "The approval removes a significant barrier for institutional adoption and could potentially lead to a sustained bull market."</p>
       
-      <p>Market analysts predict that the ETF could attract billions of dollars in inflows in its first few months, potentially driving Bitcoin's price to new all-time highs. The immediate market reaction has been decidedly positive, with Bitcoin surging more than 15% within hours of the announcement.</p>
+      <p>The positive sentiment has also spread to other cryptocurrencies, with Ethereum, Solana, and many other altcoins seeing double-digit percentage gains.</p>
       
-      <h2>Regulatory Shift</h2>
+      <h2>Institutional Interest</h2>
       
-      <p>The SEC's decision signals a significant shift in the regulatory approach to digital assets. For years, the commission had rejected numerous Bitcoin ETF applications, citing concerns about market manipulation, liquidity, and investor protection. The approval suggests that regulators have become more comfortable with the maturity and resilience of Bitcoin markets.</p>
+      <p>Several major financial institutions have already expressed their intention to offer Bitcoin ETF products to their clients. Industry experts predict that the ETF could attract more than $50 billion in inflows during its first year.</p>
       
-      <p>In its decision, the SEC highlighted several factors that influenced its change of stance, including:</p>
+      <p>"We're seeing unprecedented interest from our institutional clients," reported Michael Johnson, Head of Digital Assets at Global Investments. "Many who were previously hesitant about cryptocurrencies are now actively exploring allocation strategies."</p>
       
-      <ul>
-        <li>Improved market surveillance and cooperation between crypto exchanges and traditional financial markets</li>
-        <li>Enhanced custody solutions with institutional-grade security</li>
-        <li>Greater market liquidity and depth</li>
-        <li>More robust pricing mechanisms across multiple trading venues</li>
-      </ul>
+      <h2>Regulatory Implications</h2>
       
-      <h2>Market Impact and Outlook</h2>
+      <p>The SEC's decision may have broader implications for cryptocurrency regulation. The approval suggests a shifting regulatory stance that could potentially lead to more cryptocurrency-based financial products receiving the green light in the future.</p>
       
-      <p>The immediate market response has been electric, with Bitcoin breaking through key resistance levels and altcoins following suit in what traders are describing as the beginning of a potential bull run. Trading volumes across major exchanges have surged to levels not seen since the 2021 bull market peak.</p>
+      <p>Commissioner Elizabeth Warren stated, "While we maintain our commitment to investor protection, we also recognize the innovation and potential of blockchain technology. This approval reflects a balanced approach to regulation."</p>
       
-      <p>Institutional investors who had been sitting on the sidelines are now reportedly accelerating their digital asset strategies. Several major asset managers have already filed for their own Bitcoin ETF products, suggesting that competition in this space will heat up quickly.</p>
+      <h2>What's Next</h2>
       
-      <p>"We're seeing unprecedented interest from our institutional clients," reported Michael Johnson, head of digital assets at a major Wall Street bank. "Many who were previously restricted from direct cryptocurrency investment are now able to gain exposure through regulated ETF vehicles."</p>
+      <p>Analysts are now looking ahead to potential Ethereum ETF approvals, which many believe could follow in the coming months. Additionally, the market is watching how central banks and other regulatory bodies worldwide might respond to this development.</p>
       
-      <h2>Looking Ahead</h2>
+      <p>As institutional adoption increases, many experts predict that cryptocurrency volatility may gradually decrease, potentially making these assets more attractive to conservative investors and further driving mainstream adoption.</p>
       
-      <p>While the approval represents a major milestone for the cryptocurrency industry, experts caution that it's just one step in the ongoing integration of digital assets into the broader financial system. Questions remain about future regulatory actions regarding other cryptocurrencies and decentralized finance applications.</p>
-      
-      <p>Nevertheless, the Bitcoin ETF approval has undoubtedly opened the floodgates for greater institutional participation in cryptocurrency markets, potentially ushering in a new phase of adoption and price discovery for Bitcoin and the wider digital asset ecosystem.</p>
-      
-      <p>As one industry veteran put it: "Today marks the day when Bitcoin truly became an institutional asset class. The implications will unfold for years to come."</p>
+      <p>Whether this ETF approval marks the beginning of a sustained bull market or simply a temporary price surge remains to be seen, but its historical significance for the cryptocurrency ecosystem is undeniable.</p>
     `,
-    author: {
-      name: 'Michael Richards',
-      role: 'Senior Crypto Analyst',
-      imageUrl: 'https://randomuser.me/api/portraits/men/32.jpg'
-    },
+    author: 'Alex Thompson',
+    authorPosition: 'Senior Crypto Analyst',
     date: 'May 15, 2023',
-    category: 'Bitcoin',
-    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
     readTime: 5,
-    likes: 234
+    category: 'Bitcoin',
+    tags: ['Bitcoin', 'ETF', 'Regulation', 'Institutional Investment'],
+    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
+    likes: 234,
+    comments: 56,
+    shares: 89
   },
   '2': {
+    id: '2',
     title: 'Ethereum Completes Major Upgrade, Gas Fees Drop by 90%',
     content: `
-      <p class="lead">The long-awaited Ethereum upgrade has finally been completed, resulting in significantly lower transaction fees and improved scalability.</p>
+      <p>The long-awaited Ethereum upgrade has finally been completed, resulting in significantly lower transaction fees and improved scalability for the world's second-largest blockchain network.</p>
       
-      <p>In a development that has been years in the making, the Ethereum network has successfully implemented its most significant technical upgrade to date. The upgrade, which introduces a suite of improvements to the blockchain's infrastructure, has already resulted in a dramatic 90% reduction in transaction fees (known as "gas fees" in the Ethereum ecosystem).</p>
-      
-      <h2>A Solution to Ethereum's Scaling Challenge</h2>
-      
-      <p>For years, Ethereum has faced criticism for its high transaction costs during periods of network congestion. These fees have sometimes reached prohibitively expensive levels, pricing out smaller users and limiting the network's utility for everyday transactions. The upgrade addresses this fundamental limitation through a combination of technical innovations.</p>
-      
-      <p>"This upgrade represents the culmination of years of research and development," said Vitalik Buterin, co-founder of Ethereum. "It's designed to make Ethereum more accessible to everyone by dramatically reducing costs while maintaining the security and decentralization that makes blockchain technology valuable."</p>
+      <p>After months of testing and preparation, the upgrade was implemented through a hard fork that introduced several key improvements to the Ethereum network. Most notably, the changes have led to a dramatic reduction in gas fees, with average transaction costs dropping by approximately 90% compared to previous levels.</p>
       
       <h2>Technical Improvements</h2>
       
-      <p>The upgrade includes several key technical components:</p>
+      <p>The upgrade introduces a more efficient transaction processing mechanism that optimizes how data is stored and accessed on the blockchain. By implementing advanced data sharding techniques and improved Layer 2 integration, the network can now handle a substantially higher volume of transactions without congestion.</p>
       
-      <ul>
-        <li>Implementation of a more efficient transaction processing mechanism</li>
-        <li>Improvements to the network's data storage and retrieval systems</li>
-        <li>Enhanced security features to protect against potential attacks</li>
-        <li>Optimizations for smart contract execution</li>
-      </ul>
+      <p>"This is the culmination of years of research and development," explained Vitalik Buterin, co-founder of Ethereum. "These improvements address the scalability trilemma in ways we couldn't before, making Ethereum more accessible while maintaining security and decentralization."</p>
       
-      <p>Together, these changes allow the network to process significantly more transactions per second without requiring users to pay higher fees to prioritize their transactions during periods of congestion.</p>
+      <h2>Impact on DeFi and NFTs</h2>
       
-      <h2>Market and Ecosystem Impact</h2>
+      <p>The decentralized finance (DeFi) and non-fungible token (NFT) sectors, which are heavily built on Ethereum infrastructure, have already begun seeing positive effects from the upgrade. Daily active users across major DeFi platforms have increased by over 35% in the week following the upgrade.</p>
       
-      <p>The immediate impact has been most noticeable in Ethereum's decentralized finance (DeFi) and NFT ecosystems, where activities that previously cost tens or even hundreds of dollars in transaction fees can now be conducted for just a few dollars or less.</p>
+      <p>"Lower gas fees mean more users can participate in DeFi protocols that were previously cost-prohibitive," noted Sarah Chen, founder of DeFi Analytics. "We're seeing users with smaller amounts of capital entering the ecosystem for the first time."</p>
       
-      <p>"We've seen a 300% increase in transaction volume on our protocol since the upgrade," reported Sarah Chen, founder of a popular DeFi application. "Users who were priced out of the market are returning, and we're seeing new users who were previously hesitant due to high fees."</p>
+      <p>NFT marketplaces have also reported a surge in transaction volume, with smaller-value NFTs becoming economically viable to trade again.</p>
       
-      <p>The upgrade has also had a positive effect on Ethereum's market position, with its price appreciating significantly as investors react to the improved technical fundamentals.</p>
+      <h2>Market Response</h2>
+      
+      <p>Ethereum's price has responded positively to the successful implementation, rising approximately 25% since the upgrade was announced. However, analysts are more focused on the long-term implications for the ecosystem rather than short-term price movements.</p>
+      
+      <p>"This isn't just about price action," commented Robert Martinez, blockchain economist. "The reduced transaction costs fundamentally change Ethereum's utility and competitive position in the smart contract platform market."</p>
+      
+      <h2>Competitive Landscape</h2>
+      
+      <p>The upgrade comes at a critical time for Ethereum, which has faced increasing competition from alternative Layer 1 blockchains like Solana, Avalanche, and Cardano. Many of these competitors had gained market share by offering lower fees and higher transaction throughput.</p>
+      
+      <p>"Ethereum has effectively addressed its biggest weakness," said Thomas Wong, blockchain researcher. "While alternative chains still have their advantages, Ethereum's established ecosystem combined with these improvements makes it a formidable competitor again."</p>
       
       <h2>Looking Forward</h2>
       
-      <p>While the current upgrade represents a major milestone, the Ethereum development community emphasizes that this is just one step in an ongoing roadmap of improvements. Future upgrades are planned to further enhance the network's capacity, security, and user experience.</p>
+      <p>The development team has already outlined the next phases of Ethereum's roadmap, which include further scalability improvements and enhanced privacy features. With this major upgrade successfully implemented, confidence in the team's ability to deliver on future promises has strengthened.</p>
       
-      <p>For now, however, users across the Ethereum ecosystem are celebrating the dramatic reduction in transaction costs, which opens up new possibilities for applications and use cases that were previously impractical due to economic constraints.</p>
-      
-      <p>"This is what mainstream adoption looks like," commented one developer. "When technology becomes cheap enough and fast enough that you don't have to think about the underlying infrastructure – that's when you know you've built something that can reach billions of users."</p>
+      <p>For users and developers, the immediate benefit is clear: Ethereum is now significantly more usable for everyday transactions, opening up possibilities for applications that were previously impractical due to high costs.</p>
     `,
-    author: {
-      name: 'Sarah Johnson',
-      role: 'Blockchain Developer',
-      imageUrl: 'https://randomuser.me/api/portraits/women/44.jpg'
-    },
+    author: 'Sophia Rodriguez',
+    authorPosition: 'Blockchain Technology Reporter',
     date: 'May 12, 2023',
-    category: 'Ethereum',
-    imageUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
     readTime: 4,
-    likes: 187
+    category: 'Ethereum',
+    tags: ['Ethereum', 'Gas Fees', 'Scalability', 'DeFi', 'NFT'],
+    imageUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
+    likes: 187,
+    comments: 43,
+    shares: 65
   },
   '3': {
+    id: '3',
     title: 'Central Banks Globally Consider Digital Currency Options',
     content: `
-      <p class="lead">More than 80% of central banks worldwide are now exploring the possibility of issuing their own digital currencies, according to a new report.</p>
+      <p>More than 80% of central banks worldwide are now exploring the possibility of issuing their own digital currencies, according to a new comprehensive report released this week by the Bank for International Settlements (BIS).</p>
       
-      <p>A comprehensive survey conducted by the Bank for International Settlements (BIS) has revealed that the vast majority of central banks around the world are actively researching and developing central bank digital currencies (CBDCs). This represents a significant acceleration in interest compared to just five years ago, when fewer than 30% of central banks were exploring digital currencies.</p>
+      <p>The report, which surveyed 81 central banks across developed and emerging economies, indicates a significant acceleration in Central Bank Digital Currency (CBDC) research and development compared to previous years. This trend represents a fundamental shift in how monetary authorities are approaching the digital transformation of finance.</p>
       
-      <h2>The CBDC Race Intensifies</h2>
+      <h2>Current State of CBDCs</h2>
       
-      <p>The surge in CBDC development comes as central banks respond to the growing digitalization of economies, the declining use of physical cash in many countries, and the emergence of private cryptocurrencies and stablecoins that could potentially challenge monetary sovereignty.</p>
+      <p>Currently, only a handful of countries have launched functional CBDCs, with China's digital yuan (e-CNY) being the most advanced among major economies. The e-CNY has already been tested by millions of users across multiple cities and is being used for a growing range of payments and transactions.</p>
       
-      <p>"We are witnessing a fundamental shift in how central banks view digital currencies," explained Dr. Robert Chen, a monetary policy expert. "What was once considered experimental technology is now seen as a strategic imperative by many monetary authorities."</p>
+      <p>The Bahamas, Eastern Caribbean Central Bank, and Nigeria have also launched their digital currencies, while countries including Sweden, South Korea, and Japan are in advanced testing phases.</p>
       
-      <p>According to the report, 26 central banks have now progressed to advanced stages of CBDC development, with pilot programs either active or scheduled to launch within the next 12 months. An additional 62 central banks are in the research and proof-of-concept phase.</p>
+      <p>"We're seeing a rapid evolution from theoretical research to practical implementation," noted Dr. Maria Gonzalez, senior economist at the BIS. "Many central banks have moved beyond asking 'if' they should develop a CBDC to questions of 'how' and 'when'."</p>
       
-      <h2>Different Approaches and Designs</h2>
+      <h2>Key Motivations</h2>
       
-      <p>The report highlights significant variations in how different countries are approaching CBDC design and implementation. The key differences include:</p>
+      <p>According to the report, central banks cite several primary motivations for pursuing CBDC development:</p>
       
       <ul>
-        <li>Retail vs. wholesale focus: Some central banks are prioritizing consumer-facing digital currencies, while others are focusing on interbank and settlement systems</li>
-        <li>Technology choices: Various distributed ledger technologies are being tested alongside more traditional centralized database approaches</li>
-        <li>Privacy considerations: Different balances are being struck between user privacy and regulatory oversight capabilities</li>
-        <li>Interest-bearing features: Some CBDC designs include the ability to pay interest, potentially creating a new monetary policy tool</li>
+        <li>Financial inclusion and providing access to digital payment systems for unbanked populations</li>
+        <li>Improving payment system efficiency and reducing costs</li>
+        <li>Ensuring monetary sovereignty in a rapidly digitalizing economy</li>
+        <li>Countering the growth of private cryptocurrencies and stablecoins</li>
+        <li>Creating more effective tools for monetary policy implementation</li>
       </ul>
       
-      <p>The People's Bank of China remains the clear leader among major economies, with its digital yuan already being tested by millions of users across multiple cities. The European Central Bank has accelerated its digital euro project, while the Federal Reserve has adopted a more cautious approach, though it recently published a discussion paper outlining potential CBDC designs.</p>
+      <p>"For developing economies, financial inclusion is often the primary driver," explained James Park, digital currency specialist. "For advanced economies, concerns about maintaining monetary control in an increasingly digital landscape tend to predominate."</p>
       
-      <h2>Implications for Cryptocurrency Markets</h2>
+      <h2>Design Approaches</h2>
       
-      <p>The rapid advancement of CBDC projects has complex implications for existing cryptocurrency markets. On one hand, CBDCs validate the concept of digital currencies and could accelerate broader adoption of digital wallets and payment systems, potentially benefiting the crypto ecosystem as a whole.</p>
+      <p>The report highlights significant diversity in how central banks are approaching CBDC design. Some are pursuing retail CBDCs (for use by the general public), while others focus on wholesale CBDCs (limited to financial institutions for interbank settlements).</p>
       
-      <p>On the other hand, government-backed digital currencies could compete directly with certain cryptocurrencies, particularly those focused on payments and medium of exchange use cases. Stablecoins may face especially direct competition, along with potential regulatory restrictions.</p>
+      <p>Privacy remains a critical concern, with most central banks seeking to balance transaction privacy with regulatory compliance and anti-money laundering requirements. Many are exploring tiered privacy models where smaller transactions receive greater privacy protections than larger ones.</p>
       
-      <p>"We're entering an era where multiple forms of money will coexist in the digital realm," said Maria Garcia, chief economist at a major cryptocurrency exchange. "CBDCs will serve certain functions well, but they won't eliminate the need for decentralized cryptocurrencies that offer features like programmability, censorship-resistance, and global accessibility without requiring permission."</p>
+      <p>"The technical architecture choices are not merely technical—they're fundamentally about policy," said Emma Wilson, digital currency researcher. "How a CBDC is designed reflects a central bank's priorities regarding privacy, accessibility, and monetary control."</p>
+      
+      <h2>Implications for Cryptocurrencies</h2>
+      
+      <p>The increased interest in CBDCs has raised questions about potential impacts on existing cryptocurrencies and private stablecoins. Some analysts suggest CBDCs could reduce demand for cryptocurrencies, while others believe different digital assets will serve complementary roles.</p>
+      
+      <p>"We're likely to see a multi-currency digital future," predicted David Chen, cryptocurrency economist. "CBDCs will serve certain use cases related to everyday transactions and government interactions, while cryptocurrencies may continue to serve others, particularly where decentralization and censorship resistance are valued."</p>
       
       <h2>Looking Ahead</h2>
       
-      <p>The BIS report predicts that by 2025, more than 20 CBDCs will be in public use, representing economies that together account for over 50% of global GDP. This rapid timeline suggests that the monetary landscape is set to undergo its most significant transformation since the end of the Bretton Woods system in the early 1970s.</p>
+      <p>The report projects that more than 20 additional countries will launch CBDCs within the next three years, with the majority being retail CBDCs in emerging economies. Interoperability between different CBDCs is becoming an increasingly important focus, with several cross-border CBDC pilots already underway.</p>
       
-      <p>For individuals, businesses, and financial institutions, preparing for this new multi-currency digital future will require education, strategic planning, and adaptability as the boundaries between traditional and digital finance continue to blur.</p>
+      <p>As central banks move forward with these projects, the report emphasizes the need for continued public consultation and careful consideration of privacy implications, financial stability risks, and potential societal impacts of the transition to digital currencies.</p>
     `,
-    author: {
-      name: 'Daniel Thompson',
-      role: 'Financial Technology Reporter',
-      imageUrl: 'https://randomuser.me/api/portraits/men/67.jpg'
-    },
+    author: 'Daniel Kim',
+    authorPosition: 'Global Finance Correspondent',
     date: 'May 10, 2023',
-    category: 'CBDC',
-    imageUrl: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
     readTime: 6,
-    likes: 142
+    category: 'CBDC',
+    tags: ['CBDC', 'Central Banks', 'Digital Currency', 'Regulation'],
+    imageUrl: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
+    likes: 142,
+    comments: 37,
+    shares: 52
   }
 };
 
@@ -205,62 +208,27 @@ const relatedArticles = [
   }
 ];
 
-interface ArticleParams {
-  id: string;
-}
-
 const Article = () => {
   const { id } = useParams<ArticleParams>();
-  const [article, setArticle] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [liked, setLiked] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
+  const [article, setArticle] = useState(null);
   
-  // Simulate fetching article data
   useEffect(() => {
-    const fetchArticle = async () => {
-      // Simulate network request
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      if (id && articleContent[id as keyof typeof articleContent]) {
-        setArticle(articleContent[id as keyof typeof articleContent]);
-      }
-      
-      setIsLoading(false);
-    };
-    
-    fetchArticle();
+    // In a real app, we would fetch the article data from an API
+    // For this demo, we'll use our mock data
+    if (id && articleData[id]) {
+      setArticle(articleData[id]);
+      window.scrollTo(0, 0);
+    }
   }, [id]);
-  
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1 container mx-auto px-4 md:px-6 py-8">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-muted/50 rounded w-3/4"></div>
-            <div className="h-6 bg-muted/50 rounded w-1/2"></div>
-            <div className="h-64 bg-muted/50 rounded"></div>
-            <div className="space-y-2">
-              <div className="h-4 bg-muted/50 rounded"></div>
-              <div className="h-4 bg-muted/50 rounded"></div>
-              <div className="h-4 bg-muted/50 rounded w-5/6"></div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
   
   if (!article) {
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-1 container mx-auto px-4 md:px-6 py-16">
-          <div className="text-center">
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center p-8">
             <h1 className="text-2xl font-bold mb-4">Article Not Found</h1>
-            <p className="text-muted-foreground mb-8">The article you're looking for doesn't exist or has been removed.</p>
+            <p className="mb-6 text-muted-foreground">The article you're looking for doesn't exist or has been removed.</p>
             <Link to="/news" className="crypto-button">
               <ArrowLeft size={16} className="mr-2" />
               Back to News
@@ -277,137 +245,153 @@ const Article = () => {
       <Navbar />
       
       <main className="flex-1">
-        <article className="container mx-auto px-4 md:px-6 py-8">
-          {/* Breadcrumb navigation */}
+        <div className="container mx-auto px-4 md:px-6 py-8">
+          {/* Breadcrumb */}
           <div className="mb-6">
-            <Link to="/news" className="flex items-center text-primary hover:underline">
+            <Link to="/news" className="flex items-center text-muted-foreground hover:text-primary">
               <ArrowLeft size={16} className="mr-2" />
               Back to News
             </Link>
           </div>
           
-          {/* Article header */}
-          <header className="mb-8">
+          {/* Article Header */}
+          <div className="mb-8">
             <div className="mb-4">
-              <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+              <span className="bg-primary px-3 py-1 rounded-full text-xs font-medium text-white">
                 {article.category}
               </span>
             </div>
             
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">{article.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-6">{article.title}</h1>
             
-            <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
               <div className="flex items-center">
-                <img
-                  src={article.author.imageUrl}
-                  alt={article.author.name}
-                  className="w-10 h-10 rounded-full mr-3"
-                />
-                <div>
-                  <p className="font-medium">{article.author.name}</p>
-                  <p className="text-sm text-muted-foreground">{article.author.role}</p>
-                </div>
+                <Clock size={16} className="mr-1" />
+                <span>{article.readTime} min read</span>
               </div>
-              
-              <div className="flex items-center text-sm text-muted-foreground">
-                <div className="flex items-center mr-4">
-                  <Calendar size={16} className="mr-1" />
-                  <span>{article.date}</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock size={16} className="mr-1" />
-                  <span>{article.readTime} min read</span>
-                </div>
+              <div className="flex items-center">
+                <Calendar size={16} className="mr-1" />
+                <span>{article.date}</span>
+              </div>
+              <div className="flex items-center">
+                <ThumbsUp size={16} className="mr-1" />
+                <span>{article.likes} likes</span>
+              </div>
+              <div className="flex items-center">
+                <MessageSquare size={16} className="mr-1" />
+                <span>{article.comments} comments</span>
               </div>
             </div>
-          </header>
+            
+            <div className="flex items-center mb-8">
+              <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mr-3">
+                <span className="font-semibold text-primary">{article.author.charAt(0)}</span>
+              </div>
+              <div>
+                <p className="font-medium">{article.author}</p>
+                <p className="text-sm text-muted-foreground">{article.authorPosition}</p>
+              </div>
+            </div>
+          </div>
           
-          {/* Featured image */}
-          <div className="mb-8">
+          {/* Article Hero Image */}
+          <div className="relative mb-8 rounded-xl overflow-hidden">
             <img
               src={article.imageUrl}
               alt={article.title}
-              className="w-full h-64 md:h-96 object-cover rounded-lg"
+              className="w-full h-[400px] object-cover"
             />
           </div>
           
-          {/* Article content */}
-          <div 
-            className="prose prose-lg max-w-none dark:prose-invert mb-8"
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
-          
-          {/* Article actions */}
-          <div className="border-t border-b border-border py-4 my-8 flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setLiked(!liked)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md ${
-                  liked ? 'bg-primary/10 text-primary' : 'hover:bg-secondary'
-                }`}
-              >
-                <ThumbsUp size={18} fill={liked ? 'currentColor' : 'none'} />
-                <span>{liked ? article.likes + 1 : article.likes}</span>
-              </button>
+          {/* Article Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <article className="prose max-w-none prose-headings:font-bold prose-headings:my-6 prose-p:text-base prose-p:leading-relaxed prose-p:mb-4 prose-li:text-base">
+                <div dangerouslySetInnerHTML={{ __html: article.content }} />
+              </article>
               
-              <button
-                onClick={() => setBookmarked(!bookmarked)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md ${
-                  bookmarked ? 'bg-primary/10 text-primary' : 'hover:bg-secondary'
-                }`}
-              >
-                <Bookmark size={18} fill={bookmarked ? 'currentColor' : 'none'} />
-                <span>Save</span>
-              </button>
-            </div>
-            
-            <button
-              className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-secondary"
-              onClick={() => {
-                navigator.share ? 
-                  navigator.share({
-                    title: article.title,
-                    text: article.summary,
-                    url: window.location.href
-                  }).catch(err => console.error('Error sharing:', err)) : 
-                  alert('Share functionality not supported in this browser');
-              }}
-            >
-              <Share size={18} />
-              <span>Share</span>
-            </button>
-          </div>
-          
-          {/* Author bio */}
-          <div className="bg-card border border-border rounded-lg p-6 mb-8">
-            <div className="flex items-center mb-4">
-              <img
-                src={article.author.imageUrl}
-                alt={article.author.name}
-                className="w-16 h-16 rounded-full mr-4"
-              />
-              <div>
-                <h3 className="text-xl font-semibold">{article.author.name}</h3>
-                <p className="text-muted-foreground">{article.author.role}</p>
+              {/* Article Tags */}
+              <div className="mt-8 mb-8">
+                <h3 className="text-lg font-semibold mb-4">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {article.tags.map(tag => (
+                    <span 
+                      key={tag} 
+                      className="px-3 py-1 rounded-full text-sm bg-secondary/50 border border-border hover:bg-secondary cursor-pointer"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Article Actions */}
+              <div className="flex justify-between items-center p-4 border border-border rounded-lg">
+                <div className="flex items-center gap-2">
+                  <button className="flex items-center gap-1 px-3 py-1 rounded-full hover:bg-secondary">
+                    <ThumbsUp size={16} />
+                    <span>Like</span>
+                  </button>
+                  <button className="flex items-center gap-1 px-3 py-1 rounded-full hover:bg-secondary">
+                    <MessageSquare size={16} />
+                    <span>Comment</span>
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button className="flex items-center gap-1 px-3 py-1 rounded-full hover:bg-secondary">
+                    <Share2 size={16} />
+                    <span>Share</span>
+                  </button>
+                  <button className="flex items-center gap-1 px-3 py-1 rounded-full hover:bg-secondary">
+                    <Bookmark size={16} />
+                    <span>Save</span>
+                  </button>
+                </div>
               </div>
             </div>
-            <p className="text-muted-foreground">
-              An experienced financial analyst and writer specializing in blockchain technology and cryptocurrency markets. 
-              With over a decade of experience in financial markets and technology reporting, they provide insightful analysis 
-              of market trends and technological developments.
-            </p>
-          </div>
-          
-          {/* Related articles */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedArticles.map(article => (
-                <NewsCard key={article.id} {...article} />
-              ))}
+            
+            {/* Sidebar */}
+            <div className="space-y-8">
+              <div className="crypto-card">
+                <h3 className="text-lg font-semibold mb-4">Related Articles</h3>
+                <div className="space-y-4">
+                  {relatedArticles.map(article => (
+                    <div key={article.id} className="flex items-start gap-3">
+                      <img 
+                        src={article.imageUrl} 
+                        alt={article.title} 
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                      <div>
+                        <h4 className="font-medium line-clamp-2 hover:text-primary">
+                          <Link to={`/news/${article.id}`}>{article.title}</Link>
+                        </h4>
+                        <p className="text-sm text-muted-foreground">{article.date}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="crypto-card">
+                <h3 className="text-lg font-semibold mb-4">Subscribe to Updates</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Get the latest news and research delivered directly to your inbox.
+                </p>
+                <form className="space-y-4">
+                  <input
+                    type="email"
+                    placeholder="Your email address"
+                    className="w-full px-4 py-2 rounded-md border border-border bg-background focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <button type="submit" className="crypto-button w-full">
+                    Subscribe
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
-        </article>
+        </div>
       </main>
       
       <Footer />
